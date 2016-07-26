@@ -1,12 +1,12 @@
 # Mongo 101
-Getting started with the MongoDB Shell to query data at doopoll.
+Getting started with the MongoDB Shell to query data at doopoll. 🤓
 
 ## What is MongoDB
 [MongoDB](https://www.mongodb.com/) is the name of the database we use to store our data. It is a 'document orientated' database, which means that instead of storing our data in tables and rows (like in Excel, or MySQL) we store documents with dynamic schemas. That means it is possible for one document to have a field, and another not.
 
 Within the database we store 'collections' that our documents live in. For example, at doopoll we have a users collection, as well as one for themes, polls, questions etc. [A list of all the collection names](#collection-names) we use can be found further on in this document.
 
-## Getting Setup
+## Getting Setup 🤖
 Before you do anything you'll need to install Mongo onto your Mac. The recommended way to do this is via a package manager called Homebrew.
 
 Open up your terminal and paste in the following commands:
@@ -27,6 +27,9 @@ mongo candidate.5.mongolayer.com:10832/doopoll -u <username> -p<password>
 ```
 
 Once it loads, you should be in the shell!
+
+Note: If you make a mistake at any point in the shell don't worry! Your database user is set to readyOnly 🙃
+If the shell hangs you can press `CTRL + C` and stop the command.
 
 ## Writing count() queries
 
@@ -60,7 +63,7 @@ db.Polls.find({
 }).count()
 ```
 
-## Collection Names
+## Collection Names 🌟
 There are many collections stored on the database, here are the useful ones. If you run the `findOne()` you can see an example of a document from that collection. This helps when trying to work out what to query! All the collections are PascalCase appart from `users`.
 
 ```bash
@@ -71,4 +74,44 @@ db.Polls.findOne();
 db.Questions.findOne();
 db.Themes.findOne();
 db.users.findOne();
+```
+
+## Writing cursor queries with find() 🕵
+
+Sometimes we want to know what the values are rather than just count them. For this we can use `find()` without `count()`. We'll see the documents that match that query. The cursor will return the first X and then you can type `it` and hit enter to see more, otherwise `db.Options.find();` would flood your terminal window for a minutes!
+
+We also don't have to return the whole document. We can add a 'projection' which specifies the fields to show for these documents. We can also sort the documents by a field, and limit the amount of documents returned but chaining the commands.
+
+`db.CollectionName.find({ query }, { projection }).sort({ sort }).limit(10)`
+
+#### Here is a practical example:
+
+If we wanted to know the title and response count for every Welsh language poll:
+`db.Polls.find({ baseLanguage: 'cy' }, { name: true, responses: true })`
+
+We could make that query slightly more useful.
+- The id of the poll is returned by default unless we set it to false.
+- We can use `1` and `0` instead of `true` and `false`.
+
+`db.Polls.find({ baseLanguage: 'cy' }, { _id: 0, name: 1, responses: 1 })`
+
+That's cleaner! Now lets find the response count for the top 10 Welsh language polls. First we add apply a sort (`1` for ascending, `-1` for descending), then we limit our returned documents to 10.
+
+`db.Polls.find({ baseLanguage: 'cy' }, { _id: 0, name: 1, responses: 1 }).sort({ responses: -1 }).limit(10)`
+
+Much more useful!
+
+Finally we can chain together everything we've learnt to create a complex query. This final query will return the email address and poll count of the top 5 most active users who signed up in June 2016.
+
+Note: When a field is nested in another field, we use dot syntax to target it. We also need to add quotes around the field name. For example `'profile.pollCount'`.
+
+```
+db.users.find({ 
+  createdAt: { $gte: ISODate('2016-06-01T00:00:01.552Z'),  $lte: ISODate('2016-06-30T11:59:59.552Z')  },
+  'profile.pollCount': { $gt: 1 }
+}, {
+  _id: 0,
+  'emails.address': 1,
+  'profile.pollCount': 1,
+}).sort({ 'profile.pollCount': -1 }).limit(5)
 ```
