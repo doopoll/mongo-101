@@ -1,7 +1,7 @@
 # Mongo 101
 Getting started with the MongoDB Shell to query data at doopoll. 🤓
 
-## What is MongoDB
+## What is MongoDB 🤔
 [MongoDB](https://www.mongodb.com/) is the name of the database we use to store our data. It is a 'document orientated' database, which means that instead of storing our data in tables and rows (like in Excel, or MySQL) we store documents with dynamic schemas. That means it is possible for one document to have a field, and another not.
 
 Within the database we store 'collections' that our documents live in. For example, at doopoll we have a users collection, as well as one for themes, polls, questions etc. [A list of all the collection names](#collection-names) we use can be found further on in this document.
@@ -31,7 +31,7 @@ Once it loads, you should be in the shell!
 Note: If you make a mistake at any point in the shell don't worry! Your database user is set to readyOnly 🙃
 If the shell hangs you can press `CTRL + C` and stop the command.
 
-## Writing count() queries
+## Writing count() queries 💯
 
 Here is the simplest query we can use to get back some data. Copy and paste this link into the Mongo shell and you'll get back the current number of polls users have created.
 
