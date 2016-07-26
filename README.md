@@ -4,7 +4,7 @@ Getting started with the MongoDB Shell to query data at doopoll.
 ## What is MongoDB
 [MongoDB](https://www.mongodb.com/) is the name of the database we use to store our data. It is a 'document orientated' database, which means that instead of storing our data in tables and rows (like in Excel, or MySQL) we store documents with dynamic schemas. That means it is possible for one document to have a field, and another not.
 
-Within the database we store 'collections' that our documents live in. For example, at doopoll we have a users collection, as well as one for themes, polls, questions etc. A list of all the collection names we use can be found further on in this document.
+Within the database we store 'collections' that our documents live in. For example, at doopoll we have a users collection, as well as one for themes, polls, questions etc. [A list of all the collection names](collection-names) we use can be found further on in this document.
 
 ## Getting Setup
 Before you do anything you'll need to install Mongo onto your Mac. The recommended way to do this is via a package manager called Homebrew.
@@ -58,4 +58,17 @@ db.Polls.find({
   responses: { $gte: 1 },
   createdAt: { $lt: ISODate('2016-06-01T00:00:01.552Z') }
 }).count()
+```
+
+## Collection Names
+There are many collections stored on the database, here are the useful ones. If you run the `findOne()` command next to it you can see an example of a document from that collection. This helps when trying to work out what to query! All the collections are PascalCase appart from `users`.
+
+```bash
+AccountData: db.AccountData.findOne();
+Invoices: db.Invoices.findOne();
+Options: db.Options.findOne();
+Polls: db.Polls.findOne();
+Questions: db.Questions.findOne();
+Themes: db.Themes.findOne();
+users: db.users.findOne();
 ```
