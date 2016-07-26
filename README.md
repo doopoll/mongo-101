@@ -61,14 +61,14 @@ db.Polls.find({
 ```
 
 ## Collection Names
-There are many collections stored on the database, here are the useful ones. If you run the `findOne()` command next to it you can see an example of a document from that collection. This helps when trying to work out what to query! All the collections are PascalCase appart from `users`.
+There are many collections stored on the database, here are the useful ones. If you run the `findOne()` you can see an example of a document from that collection. This helps when trying to work out what to query! All the collections are PascalCase appart from `users`.
 
 ```bash
-AccountData: db.AccountData.findOne();
-Invoices: db.Invoices.findOne();
-Options: db.Options.findOne();
-Polls: db.Polls.findOne();
-Questions: db.Questions.findOne();
-Themes: db.Themes.findOne();
-users: db.users.findOne();
+db.AccountData.findOne();
+db.Invoices.findOne();
+db.Options.findOne();
+db.Polls.findOne();
+db.Questions.findOne();
+db.Themes.findOne();
+db.users.findOne();
 ```
