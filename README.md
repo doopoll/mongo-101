@@ -115,3 +115,17 @@ db.users.find({
   'profile.pollCount': 1,
 }).sort({ 'profile.pollCount': -1 }).limit(5)
 ```
+
+## Writing a function 💡
+If you find yourself needed the same set of numbers all the time you can write a javascript function that will generate a report. Here's a quick example:
+
+```js
+var starterPollReport = function() {
+ var starterPollCount = db.Polls.find({isStarterPoll: true}).count();
+ var duplicatedStarterPollCount = db.Polls.find({isStarterPoll: true, duplicatedCount: {$gte: 1}}).count();
+ print('Starter Polls: ' + starterPollCount);
+ print('Duplicated Starter Polls: ' + duplicatedStarterPollCount);
+}
+
+starterPollReport();
+```
