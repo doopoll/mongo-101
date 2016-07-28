@@ -151,7 +151,7 @@ var juneSignups = db.users.find({
 juneSignups.forEach(function(user) {
   var polls = db.Polls.find({_id: { $in: user.profile.polls }});
   polls.forEach(function(poll) {
-    print(poll.name);
+    print(poll.name + " https://app.doopoll.co/poll/" + poll._id + "/live-results");
   });
 });
 ```
