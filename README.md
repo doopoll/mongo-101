@@ -138,3 +138,20 @@ var starterPollReport = function() {
 
 starterPollReport();
 ```
+
+Functions can be really powerful, and help you interact between collections, however the aggregate framework is probably better for this.
+
+This example will print the name of every poll name created by users who signed up in June 2016:
+
+```js
+var juneSignups = db.users.find({
+  createdAt: { $gte: ISODate('2016-06-01T00:00:01.552Z'), $lte: ISODate('2016-06-30T11:59:59.552Z') }
+});
+
+juneSignups.forEach(function(user) {
+  var polls = db.Polls.find({_id: { $in: user.profile.polls }});
+  polls.forEach(function(poll) {
+    print(poll.name);
+  });
+});
+```
