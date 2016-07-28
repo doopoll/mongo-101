@@ -116,6 +116,15 @@ db.users.find({
 }).sort({ 'profile.pollCount': -1 }).limit(5)
 ```
 
+## Using $or 👫
+Sometimes you want to find out whether a document meets one or more criteria. You need $or! Here's how you use it:
+
+`db.Collection.find( { $or: [ { query A }, { query B } ] } ).count()`
+
+So if you wanted to find out the number of accounts with more than one users, or over 100 polls:
+
+`db.AccountData.find( { $or: [ { 'usage.users': { $gt: 1 } }, { 'usage.polls': { $get: 100 } } ] } ).count()`
+
 ## Writing a function 💡
 If you find yourself needed the same set of numbers all the time you can write a javascript function that will generate a report. Here's a quick example:
 
