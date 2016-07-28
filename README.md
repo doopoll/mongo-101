@@ -155,3 +155,51 @@ juneSignups.forEach(function(user) {
   });
 });
 ```
+
+## Aggregation and Cohort Analysis 🍱
+MongoDB includes a framework called 'aggregate' that can be used for complex metrics. When we pair this with some native javascript, data gets really useful.
+
+Here we define a cohort of users who signed up in June 2016 that created a poll in June 2016. With this we can track the cohort across various actions, and compare them with other cohorts.
+
+```js
+var cohortDateRange = {
+  $gte: ISODate('2016-06-01T00:00:01.552Z'), $lte: ISODate('2016-06-30T11:59:59.552Z')
+}
+
+var createdPollDateRange = {
+  $gte: ISODate('2016-06-01T00:00:01.552Z'), $lte: ISODate('2016-06-30T11:59:59.552Z')
+}
+
+var cohort = db.users.aggregate(
+  [
+    { $project : { createdAt: 1 , _id: 1 } },
+    { $match: {
+      createdAt: cohortDateRange
+    }},
+    { $sort : { createdAt : 1 } },
+    { $group: { _id: '$_id' }}
+  ]
+).toArray().map(function(user) {
+  return user._id
+});
+
+var usersWhoCreatedPoll = db.Polls.aggregate(
+  [
+    { $project : { createdAt: 1 , _id: 1, ownerId: 1 } },
+    { $match: {
+      ownerId: { $in: cohort },
+      createdAt: createdPollDateRange
+    }},
+    { $sort : { createdAt : 1 } },
+    { $group: { _id: { ownerId: '$ownerId' } }}
+  ]
+).toArray().map(function(poll) {
+  return poll._id.ownerId;
+});;
+
+print('--------------------\n' +
+'Size of Cohort: ' + cohort.length + '\n' +
+'Created poll in time period: ' + usersWhoCreatedPoll.length  + '\n' +
+'Percentage: ' + (usersWhoCreatedPoll.length/ (cohort.length / 100)).toFixed(2) + '%');
+```
+
