@@ -157,8 +157,61 @@ juneSignups.forEach(function(user) {
 ```
 
 ## Aggregation and Cohort Analysis 🍱
-MongoDB includes a framework called 'aggregate' that can be used for complex metrics. When we pair this with some native javascript, data gets really useful.
+MongoDB includes a framework called 'aggregate' that can be used for complex metrics. When we pair this with some native javascript, data gets really useful. If you want more information, [check out the docs](https://docs.mongodb.com/manual/reference/operator/aggregation/)
 
+Here's a simple example that uses the `$sum` operator to count the total number of responses for all polls.
+
+```js
+db.Polls.aggregate([{ 
+  $group: { 
+    _id: null, 
+    total: { 
+      $sum: "$responses" 
+    } 
+  } 
+}]);
+```
+
+We can extend this query to count the number of polls too to provide some context:
+
+```js
+db.Polls.aggregate([{ 
+  $group: { 
+    _id: null, 
+    pollCount: { 
+      $sum: 1 
+    },
+    responseCount: { 
+      $sum: "$responses" 
+    } 
+  } 
+}]);
+```
+
+Finally, we can add a date range to get the count of polls created in a time period, and their total response count:
+
+```js
+var dateRange = {
+  $gte: ISODate('2016-06-01T00:00:01.552Z'), $lte: ISODate('2016-06-30T11:59:59.552Z')
+}
+
+db.Polls.aggregate([
+  { $match: {
+    createdAt: dateRange
+  }},{ 
+  $group: { 
+    _id: null, 
+    pollCount: { 
+      $sum: 1 
+    },
+    responseCount: { 
+      $sum: "$responses" 
+    } 
+  }}
+]);
+```
+
+#### Cohort analysis
 Here we define a cohort of users who signed up in June 2016 that created a poll in June 2016. With this we can track the cohort across various actions, and compare them with other cohorts.
 
 ```js
