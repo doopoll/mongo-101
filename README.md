@@ -116,6 +116,15 @@ db.users.find({
 }).sort({ 'profile.pollCount': -1 }).limit(5)
 ```
 
+## Regex 🍉
+This is a super useful tool for gaining insight. This query would count every minLabel of a question that includes a '£' sign, which would allow us to work out whether people are using sliders for currency based questions:
+
+```
+db.Questions.find({
+  minLabel: { $regex: /£/ }
+}).count();
+```
+
 ## Using $or 👫
 Sometimes you want to find out whether a document meets one or more criteria. You need $or! Here's how you use it:
 
