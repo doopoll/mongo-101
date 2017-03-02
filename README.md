@@ -34,11 +34,11 @@ If the shell hangs you can press `CTRL + C` and stop the command.
 ### Primary and secondary 🥇🥈
 Sometimes you might login and find that the command line says `<SECONDARY>` instead of `<PRIMARY>`. This means that since you last logged in to the shell the sets in the database have had an election and chosen a new master (democracy at work). You need to update your string at this point.
 
-1) Connect to shell using your string
-2) Run `db.isMaster()`
-3) In the object that is returned will be field called `primary`
-4) In your connection string, replace the `candidate.5.mongolayer.com:10832` (or simular) with the new `primary` and save it for later
-5) Disconnect from the shell and reconnect using your updated connection string
+- Connect to shell using your string
+- Run `db.isMaster()`
+- In the object that is returned will be field called `primary`
+- In your connection string, replace the `candidate.5.mongolayer.com:10832` (or simular) with the new `primary` and save it for later
+- Disconnect from the shell and reconnect using your updated connection string
 
 ## Writing count() queries 💯
 
